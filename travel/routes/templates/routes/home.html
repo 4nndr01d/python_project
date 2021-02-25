@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title%} Train {% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-6 mx-auto">
+        <h1 class="display-6">
+            Search Route
+        </h1>
+        {{routes}}
+        {% if routes %}
+
+        <h3>Route from {{ cities.from_city }} to {{ cities.to_city }} </h3>
+        <hr>
+        {% for route in routes %}
+            {% if forloop.first %}
+            <h5>Shortest route</h5>
+            {% endif %}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Train list:</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for train in route.routes %}
+                <tr>
+                    <td>Train № {{train.name}}, from {{train.from_city}} , to {{train.to_city}} .
+                        Travel time {{train.travel_time}}
+                    </td>
+                </tr>
+                <br>
+                {% endfor %}
+                </tbody>
+            </table>
+            <p>Total time in travel: {{ route.total_time }}</p>
+        {% endfor %}
+        {% endif %}
+        <form action="{% url 'find_routes' %}" method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+            <br>
+            <input type="submit" value="Search">
+        </form>
+    </div>
+</div>
+
+{% endblock %}

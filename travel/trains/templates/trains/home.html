@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title%} Train {% endblock %}
+{% block content %}
+<h1 class="display-4">
+    Trains
+</h1>
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Train number</th>
+                <th>Starting city</th>
+                <th>End city</th>
+                <th>Travel time</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+            <tr>
+                <th scope="row">{{object.id}}</th>
+                <td><a href="/trains/detail/{{object.id}}">{{object.name}}</a></td>
+                <td>{{object.from_city}}</td>
+                <td>{{object.to_city}}</td>
+                <td>{{object.travel_time}}</td>
+                <td><a class="btn btn-primary btn-sm" href="/trains/update/{{object.id}}">edit</a></td>
+                <td><a class="btn btn-danger btn-sm" href="/trains/delete/{{object.id}}">delete</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {% if object_list.has_previous %}
+                <li class="page-item"><a class="page-link"
+                                         href="?page={{ object_list.previous_page_number }}">Previous</a></li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">Previous</span>
+                </li>
+                {% endif %}
+
+                <li class="page-item {% if not object_list.has_previous %} active {% endif %} "><a class="page-link"
+                                                                                                   href="?page=1">1</a>
+                </li>
+
+                {% if object_list.paginator.num_pages > 1 %}
+
+                {% if object_list.paginator.num_pages > 2 %}
+                    {% if object_list.number != 1 and object_list.number != object_list.paginator.num_pages %}
+                        <li class="page-item active">
+                            <a class="page-link" href="?page={{ object_list.number }}">{{ object_list.number }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">..</span>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                <li class="page-item {% if not object_list.has_next %} active {% endif %}">
+                    <a class="page-link" href="?page={{ object_list.paginator.num_pages }}">{{ object_list.paginator.num_pages }}</a>
+                </li>
+
+                {% endif %}
+
+                {% if object_list.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ object_list.next_page_number }}">Next</a></li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">Next</span>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+    </div>
+</div>
+
+<a href="/trains/add/" class="btn btn-success">Add train</a>
+
+{% endblock %}
